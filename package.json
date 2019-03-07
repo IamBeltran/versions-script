@@ -5,12 +5,14 @@
   "description": "Repository that contains a collection of scripts, for its development and evolution, keeping the different versions of them",
   "keywords": [
     "Build",
-    "Database",
     "Deploy",
     "Development",
+    "Developing",
     "Javascript",
     "Script",
-    "Versions"
+    "Scripting",
+    "Versions",
+    "Testing"
   ],
   "homepage": "https://github.com/IamBeltran/versions-script#readme",
   "bugs": {
