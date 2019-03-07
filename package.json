@@ -1,5 +1,5 @@
 {
-  "name": "versions-script",
+  "name": "versionsscript",
   "version": "1.0.0",
   "private": true,
   "description": "Repository that contains a collection of scripts, for its development and evolution, keeping the different versions of them",
@@ -45,13 +45,15 @@
     "lint": "gulp lint"
   },
   "dependencies": {
+    "cross-env": "^5.2.0",
     "dotenv": "^6.2.0",
     "dotenv-expand": "^4.2.0",
     "ip": "^1.1.5",
-    "winston-daily-rotate-file": "^3.8.0",
-    "winston": "^3.2.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.23",
     "morgan": "^1.9.1",
-    "cross-env": "^5.2.0"
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
