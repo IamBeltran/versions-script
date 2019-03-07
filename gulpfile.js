@@ -22,10 +22,7 @@ gulp.task('lint', () =>
     .src(all)
     .pipe(
       eslint({
-        rules: {
-          'import/no-dynamic-require': 0,
-          'no-param-reassign': ['error', { props: false }],
-        },
+        rules: {},
       }),
     )
     .pipe(eslint.format())
