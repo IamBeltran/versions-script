@@ -63,8 +63,11 @@ typings/
 # notes
 notes/
 
-#File TO_DO_LIST.md
+# File TO_DO_LIST.md
 TO_DO_LIST.md
 
 #File NOTES.md
 NOTES.md
+
+# Matches the files with
+test**.js
