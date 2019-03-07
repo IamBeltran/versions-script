@@ -1,0 +1,83 @@
+{
+  "name": "versions-script",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Repository that contains a collection of scripts, for its development and evolution, keeping the different versions of them",
+  "keywords": [
+    "Build",
+    "Database",
+    "Deploy",
+    "Development",
+    "Javascript",
+    "Script",
+    "Versions"
+  ],
+  "homepage": "https://github.com/IamBeltran/versions-script#readme",
+  "bugs": {
+    "url": "https://github.com/IamBeltran/versions-script/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IamBeltran/versions-script.git"
+  },
+  "license": "MIT",
+  "author": "Victor Giovanni Beltrán Rodriguez <beltran-victor@outlook.com> (example.com)",
+  "contributors": [
+    {
+      "name": "Victor Giovanni Beltrán Rodriguez",
+      "email": "beltran-victor@outlook.com"
+    }
+  ],
+  "main": "src/index.js",
+  "directories": {
+    "doc": "./directories/doc",
+    "bin": "./directories/bin",
+    "example": "./directories/example",
+    "lib": "./directories/lib",
+    "man": "./directories/man",
+    "test": "./directories/test"
+  },
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development nodemon src/server/bin/www",
+    "test": "cross-env NODE_ENV=test nodemon ./test.js",
+    "lint": "gulp lint"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
+    "ip": "^1.1.5",
+    "winston-daily-rotate-file": "^3.8.0",
+    "winston": "^3.2.1",
+    "morgan": "^1.9.1",
+    "cross-env": "^5.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "gulp": "^4.0.0",
+    "gulp-eslint": "^5.0.0",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4"
+  },
+  "engines": {},
+  "engineStrict": false,
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [],
+  "preferGlobal": true,
+  "publishConfig": {
+    "registry": "https://your-private-hosted-npm.registry.nodejitsu.com"
+  },
+  "analyze": true,
+  "subdomain": "foobar"
+}
