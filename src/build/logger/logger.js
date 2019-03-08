@@ -123,10 +123,9 @@ const formatConsole01 = combine(
   ms(),
   printf(info => {
     const { timestamp, label, level, message, ms, ...args } = info;
-    return `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}`;
-    /*Object.keys(args).length
-      ? `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}:\n${JSON.stringify(args, null, 2)}`
-      : `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}`;*/
+    return Object.keys(args).length
+      ? `${ms.padEnd(6)}- ${message}:\n${JSON.stringify(args, null, 2)}`
+      : `${ms.padEnd(6)}- ${message}`;
   }),
 );
 
