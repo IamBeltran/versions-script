@@ -134,7 +134,7 @@ const formatFile = combine(
 );
 
 //  ──[ FORMAT CONSOLE. ]────────────────────────────────────────────────────────────────
-const FORMAT_CONSOLE = combine(
+const formatConsole00 = combine(
   colorize({ all: true }),
   printf(info => {
     const { timestamp, label, level, message, ms, ...args } = info;
@@ -163,7 +163,7 @@ const logger = createLogger({
       eol: os.EOL,
       json: false,
       colorize: true,
-      format: FORMAT_CONSOLE,
+      format: formatConsole00,
       options: {
         flags: 'a+',
         encoding: 'utf8',
