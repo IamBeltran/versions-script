@@ -46,14 +46,16 @@ fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 const dateLog = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
 
 //  ──[ NAME FOR FILE.  ]────────────────────────────────────────────────────────────────
-const nameError = `error.log`;
-const nameInfo = `info.log`;
-const nameExceptions = 'exceptions.log';
+const nameError = `error_${dateLog}.log`;
+const nameInfo = `info_${dateLog}.log`;
+const nameExceptions = `exceptions_${dateLog}.log`;
+const nameAudit = `auditFile.json`;
 
 //  ──[ PATH FOR FILE.  ]────────────────────────────────────────────────────────────────
-const fileError = `${dirLog}/${dateLog}.${nameError}`;
-const fileInfo = `${dirLog}/${dateLog}.${nameInfo}`;
-const fileExceptions = `${dirLog}/${dateLog}.${nameExceptions}`;
+const fileError = `${dirLog}/${nameError}`;
+const fileInfo = `${dirLog}/${nameInfo}`;
+const fileExceptions = `${dirLog}/${nameExceptions}`;
+const fileAudit = `${dirRotate}/${nameAudit}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
@@ -130,7 +132,7 @@ addColors(options.colors);
 const logger = createLogger({
   level: 'info',
   levels: options.levels,
-  format: combine(appendTimestamp(), appendLabel()),
+  format: combine(appendTimestamp(), appendLabel(), json()),
   transports: [
     new transports.Console({
       name: 'CONSOLE_FOR_MIDDLEWARE',
@@ -190,9 +192,13 @@ const logger = createLogger({
       },
     }),
   ],
+  exceptionHandlers: [
+    new transports.File({ filename: fileExceptions, format: formatFile }),
+  ],
   exitOnError: false,
   silent: false,
 });
+
 
 logger.stream = {
   success: {
@@ -217,6 +223,23 @@ logger.stream = {
 
 /*
 
+const DailyRotateFile = require('winston-daily-rotate-file');
+logger.configure({
+  level: 'verbose',
+  transports: [
+    new DailyRotateFile({
+      frequency: '1m',
+      filename: 'application-%DATE%.log',
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '14d',
+      dirname: dirRotate,
+      auditFile: fileAudit,
+    }),
+  ],
+});
+
 //  ──[ ENUMERATE ERROR. ]───────────────────────────────────────────────────────────────
 const enumerateError = format(info => {
   if (info.message instanceof Error) {
@@ -239,21 +262,7 @@ const enumerateError = format(info => {
   }
   return info;
 });
-const DailyRotateFile = require('winston-daily-rotate-file');
-
-logger.configure({
-  level: 'verbose',
-  transports: [
-    new DailyRotateFile({
-      frequency: '1m',
-      filename: 'application-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
-    }),
-  ],
-});
 */
+
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 module.exports = logger;
