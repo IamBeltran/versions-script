@@ -2,7 +2,6 @@
 //  │  REQUIRE THIRD-PARTY MODULES DEPENDENCY.                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const winston = require('winston');
-const DailyRotateFile = require('winston-daily-rotate-file');
 const moment = require('moment-timezone');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -44,7 +43,7 @@ fs.existsSync(dirLog) || fs.mkdirSync(dirLog);
 fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 
 //  ──[ DATE FOR NAME. ]─────────────────────────────────────────────────────────────────
-// const DATE_LOG = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
+const dateLog = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
 
 //  ──[ NAME FOR FILE.  ]────────────────────────────────────────────────────────────────
 const nameError = `error.log`;
@@ -52,9 +51,9 @@ const nameInfo = `info.log`;
 const nameExceptions = 'exceptions.log';
 
 //  ──[ PATH FOR FILE.  ]────────────────────────────────────────────────────────────────
-const fileError = `${dirLog}/${nameError}`;
-const fileInfo = `${dirLog}/${nameInfo}`;
-const fileExceptions = `${dirLog}/${nameExceptions}`;
+const fileError = `${dirLog}/${dateLog}.${nameError}`;
+const fileInfo = `${dirLog}/${dateLog}.${nameInfo}`;
+const fileExceptions = `${dirLog}/${dateLog}.${nameExceptions}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
@@ -100,29 +99,6 @@ const appendLabel = format(info => {
   return info;
 });
 
-//  ──[ ENUMERATE ERROR. ]───────────────────────────────────────────────────────────────
-const enumerateError = format(info => {
-  if (info.message instanceof Error) {
-    info.message = Object.assign(
-      {
-        message: info.message.message,
-        stack: info.message.stack,
-      },
-      JSON.stringify(info.message),
-    );
-  }
-  if (info instanceof Error) {
-    return Object.assign(
-      {
-        message: info.message,
-        stack: info.stack,
-      },
-      info,
-    );
-  }
-  return info;
-});
-
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  FUNCTIONS TO FORMAT TRANSPORTS.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
@@ -154,7 +130,7 @@ addColors(options.colors);
 const logger = createLogger({
   level: 'info',
   levels: options.levels,
-  format: combine(format.ms(), appendTimestamp(), appendLabel()),
+  format: combine(appendTimestamp(), appendLabel()),
   transports: [
     new transports.Console({
       name: 'CONSOLE_FOR_MIDDLEWARE',
@@ -193,7 +169,6 @@ const logger = createLogger({
         mode: 0o666,
       },
     }),
-
     new transports.File({
       name: 'FILE_FOR_INFO',
       level: 'info',
@@ -240,17 +215,45 @@ logger.stream = {
   },
 };
 
+/*
+
+//  ──[ ENUMERATE ERROR. ]───────────────────────────────────────────────────────────────
+const enumerateError = format(info => {
+  if (info.message instanceof Error) {
+    info.message = Object.assign(
+      {
+        message: info.message.message,
+        stack: info.message.stack,
+      },
+      JSON.stringify(info.message),
+    );
+  }
+  if (info instanceof Error) {
+    return Object.assign(
+      {
+        message: info.message,
+        stack: info.stack,
+      },
+      info,
+    );
+  }
+  return info;
+});
+const DailyRotateFile = require('winston-daily-rotate-file');
+
 logger.configure({
   level: 'verbose',
   transports: [
     new DailyRotateFile({
       frequency: '1m',
-      datePattern: 'YYYY-MM-DD-HH',
-      zippedArchive: false,
       filename: 'application-%DATE%.log',
-      dirname: dirRotate,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '14d',
     }),
   ],
 });
+*/
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 module.exports = logger;
