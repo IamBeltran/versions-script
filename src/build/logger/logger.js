@@ -54,24 +54,10 @@ const FILE_ERROR = `${logDirectory}/${NAME_ERROR}`;
 const FILE_INFO = `${logDirectory}/${NAME_INFO}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │  SETTINGS FOR MODULE.                                                             │
+//  │  OPTIONS FOR MODULE LOGGER.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 
-//  ──[ APPEND TIMESTAMP. ]──────────────────────────────────────────────────────────────
-const appendTimestamp = format((info, opts) => {
-  info.timestamp = moment()
-    .tz(opts.tz || 'America/Mexico_City')
-    .format('YYYY-MM-DD hh:mm:ss:ms');
-  return info;
-});
-
-//  ──[ APPEND LABEL. ]──────────────────────────────────────────────────────────────────
-const appendLabel = format(info => {
-  info.label = info.label || 'Default';
-  return info;
-});
-//  ──[ SETTING COLORS. ]────────────────────────────────────────────────────────────────
-
+//  ──[ OPTIONS. ]───────────────────────────────────────────────────────────────────────
 const options = {
   colors: {
     error: 'red',
@@ -93,10 +79,49 @@ const options = {
   },
 };
 
-addColors(options.colors);
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │  FUNCTIONS TO FORMAT DATA.                                                        │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+
+//  ──[ APPEND TIMESTAMP. ]──────────────────────────────────────────────────────────────
+const appendTimestamp = format((info, opts) => {
+  info.timestamp = moment()
+    .tz(opts.tz || 'America/Mexico_City')
+    .format('YYYY-MM-DD hh:mm:ss:ms');
+  return info;
+});
+
+//  ──[ APPEND LABEL. ]──────────────────────────────────────────────────────────────────
+const appendLabel = format(info => {
+  info.label = info.label || 'Default';
+  return info;
+});
+
+//  ──[ ENUMERATE ERROR. ]───────────────────────────────────────────────────────────────
+const enumerateError = format(info => {
+  if (info.message instanceof Error) {
+    info.message = Object.assign(
+      {
+        message: info.message.message,
+        stack: info.message.stack,
+      },
+      JSON.stringify(info.message),
+    );
+  }
+  if (info instanceof Error) {
+    return Object.assign(
+      {
+        message: info.message,
+        stack: info.stack,
+      },
+      info,
+    );
+  }
+  return info;
+});
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │  FORMAT FOR TRANSPORTS.                                                           │
+//  │  FUNCTIONS TO FORMAT TRANSPORTS.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 
 //  ──[ FORMAT FILE. ]───────────────────────────────────────────────────────────────────
@@ -107,6 +132,7 @@ const FORMAT_FILE = combine(
   }),
 );
 
+//  ──[ FORMAT CONSOLE. ]────────────────────────────────────────────────────────────────
 const FORMAT_CONSOLE = combine(
   colorize({ all: true }),
   printf(info => {
@@ -120,6 +146,7 @@ const FORMAT_CONSOLE = combine(
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  FORMAT TO TRANSPORTS.                                                            │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+addColors(options.colors);
 const logger = createLogger({
   level: 'info',
   levels: options.levels,
