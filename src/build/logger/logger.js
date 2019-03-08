@@ -49,9 +49,12 @@ fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 //  ──[ NAME FOR FILE.  ]────────────────────────────────────────────────────────────────
 const nameError = `error.log`;
 const nameInfo = `info.log`;
+const nameExceptions = 'exceptions.log';
 
+//  ──[ PATH FOR FILE.  ]────────────────────────────────────────────────────────────────
 const fileError = `${dirLog}/${nameError}`;
 const fileInfo = `${dirLog}/${nameInfo}`;
+const fileExceptions = `${dirLog}/${nameExceptions}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
@@ -237,5 +240,17 @@ logger.stream = {
   },
 };
 
+logger.configure({
+  level: 'verbose',
+  transports: [
+    new DailyRotateFile({
+      frequency: '1m',
+      datePattern: 'YYYY-MM-DD-HH',
+      zippedArchive: false,
+      filename: 'application-%DATE%.log',
+      dirname: dirRotate,
+    }),
+  ],
+});
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 module.exports = logger;
