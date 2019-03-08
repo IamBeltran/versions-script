@@ -24,7 +24,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const { createLogger, format, config, transports } = winston;
 
 //  ──[ DESTRUCTURING FORMAT. ]──────────────────────────────────────────────────────────
-const { combine, json, printf, colorize } = format;
+const { combine, json, printf, colorize, errors } = format;
 
 //  ──[ DESTRUCTURING CONFIG.  ]─────────────────────────────────────────────────────────
 const { addColors } = config;
@@ -87,7 +87,7 @@ const options = {
 const appendTimestamp = format((info, opts) => {
   info.timestamp = moment()
     .tz(opts.tz || 'America/Mexico_City')
-    .format('YYYY-MM-DD hh:mm:ss:ms');
+    .format(opts.format || 'YYYY-MM-DD hh:mm:ss:ms');
   return info;
 });
 
@@ -125,10 +125,11 @@ const enumerateError = format(info => {
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 
 //  ──[ FORMAT FILE. ]───────────────────────────────────────────────────────────────────
-const FORMAT_FILE = combine(
+const formatFile = combine(
+  errors({ stack: true }),
   json(info => {
-    const { timestamp, label, level, message } = info;
-    return `${timestamp} ${level} ${label} ${message}`;
+    const { timestamp, label, level, message, ms } = info;
+    return `${timestamp}${level}${label}${message}${ms}`;
   }),
 );
 
@@ -136,10 +137,10 @@ const FORMAT_FILE = combine(
 const FORMAT_CONSOLE = combine(
   colorize({ all: true }),
   printf(info => {
-    const { timestamp, label, level, message, ...args } = info;
+    const { timestamp, label, level, message, ms, ...args } = info;
     return Object.keys(args).length
-      ? `${timestamp} ${label} ${level}: ${message}:\n${JSON.stringify(args, null, 2)}`
-      : `${timestamp} ${label} ${level}: ${message}`;
+      ? `${timestamp} ${level} ${label}: ${message}:\n${JSON.stringify(args, null, 2)}`
+      : `${timestamp} ${level} ${label}: ${message}`;
   }),
 );
 
@@ -150,7 +151,7 @@ addColors(options.colors);
 const logger = createLogger({
   level: 'info',
   levels: options.levels,
-  format: combine(appendTimestamp(), appendLabel()),
+  format: combine(format.ms(), appendTimestamp(), appendLabel()),
   transports: [
     new transports.Console({
       name: 'CONSOLE_FOR_MIDDLEWARE',
@@ -176,7 +177,7 @@ const logger = createLogger({
       colorize: false,
       eol: os.EOL,
       filename: FILE_ERROR,
-      format: FORMAT_FILE,
+      format: formatFile,
       handleExceptions: false,
       maxsize: 5242880, // 5MB
       maxFiles: 10,
@@ -197,7 +198,7 @@ const logger = createLogger({
       colorize: false,
       eol: os.EOL,
       filename: FILE_INFO,
-      format: FORMAT_FILE,
+      format: formatFile,
       handleExceptions: false,
       maxsize: 5242880, // 5MB
       maxFiles: 10,
