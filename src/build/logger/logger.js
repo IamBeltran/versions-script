@@ -47,11 +47,11 @@ fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 // const DATE_LOG = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
 
 //  ──[ NAME FOR FILE.  ]────────────────────────────────────────────────────────────────
-const NAME_ERROR = `LOG_ERROR.log`;
-const NAME_INFO = `LOG_INFO.log`;
+const nameError = `error.log`;
+const nameInfo = `info.log`;
 
-const FILE_ERROR = `${dirLog}/${NAME_ERROR}`;
-const FILE_INFO = `${dirLog}/${NAME_INFO}`;
+const fileError = `${dirLog}/${nameError}`;
+const fileInfo = `${dirLog}/${nameInfo}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
@@ -176,7 +176,7 @@ const logger = createLogger({
       silent: false,
       colorize: false,
       eol: os.EOL,
-      filename: FILE_ERROR,
+      filename: fileError,
       format: formatFile,
       handleExceptions: false,
       maxsize: 5242880, // 5MB
@@ -197,7 +197,7 @@ const logger = createLogger({
       silent: false,
       colorize: false,
       eol: os.EOL,
-      filename: FILE_INFO,
+      filename: fileInfo,
       format: formatFile,
       handleExceptions: false,
       maxsize: 5242880, // 5MB
