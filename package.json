@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development nodemon src/server/bin/www",
-    "test": "cross-env NODE_ENV=test nodemon ./test.js",
+    "test": "cross-env NODE_ENV=test nodemon ./test.logger.js",
     "lint": "gulp lint"
   },
   "dependencies": {
