@@ -34,13 +34,10 @@ const { addColors } = config;
 
 //  ──[ DIRECTORY FOR LOGS.  ]───────────────────────────────────────────────────────────
 const dirLog = resolveApp(`logs`);
-const dirRotate = resolveApp(`logs/rotate`);
 
 //  ──[ CREATE DIRECTORY. ]──────────────────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-expressions
 fs.existsSync(dirLog) || fs.mkdirSync(dirLog);
-// eslint-disable-next-line no-unused-expressions
-fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 
 //  ──[ DATE FOR NAME. ]─────────────────────────────────────────────────────────────────
 const dateLog = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
@@ -48,14 +45,10 @@ const dateLog = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
 //  ──[ NAME FOR FILE.  ]────────────────────────────────────────────────────────────────
 const nameError = `error_${dateLog}.log`;
 const nameInfo = `info_${dateLog}.log`;
-const nameExceptions = `exceptions_${dateLog}.log`;
-const nameAudit = `auditFile.json`;
 
 //  ──[ PATH FOR FILE.  ]────────────────────────────────────────────────────────────────
 const fileError = `${dirLog}/${nameError}`;
 const fileInfo = `${dirLog}/${nameInfo}`;
-const fileExceptions = `${dirLog}/${nameExceptions}`;
-const fileAudit = `${dirRotate}/${nameAudit}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
@@ -192,13 +185,9 @@ const logger = createLogger({
       },
     }),
   ],
-  exceptionHandlers: [
-    new transports.File({ filename: fileExceptions, format: formatFile }),
-  ],
   exitOnError: false,
   silent: false,
 });
-
 
 logger.stream = {
   success: {
@@ -222,6 +211,25 @@ logger.stream = {
 };
 
 /*
+
+const dirRotate = resolveApp(`logs/rotate`);
+const nameExceptions = `exceptions_${dateLog}.log`;
+const nameAudit = `auditFile.json`;
+
+
+// eslint-disable-next-line no-unused-expressions
+fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
+
+const fileExceptions = `${dirLog}/${nameExceptions}`;
+const fileAudit = `${dirRotate}/${nameAudit}`;
+
+  logger.exceptions.handle(
+    new transports.File({ filename: 'exceptions.log' })
+  );
+
+  exceptionHandlers: [
+    new transports.File({ filename: fileExceptions, format: formatFile }),
+  ],
 
 const DailyRotateFile = require('winston-daily-rotate-file');
 logger.configure({
