@@ -33,15 +33,15 @@ const { addColors } = config;
 //  │  DECLARATION OF CONSTANTS.                                                        │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 
-//  ──[ PATHS MODULES.  ]────────────────────────────────────────────────────────────────
-const logDirectory = resolveApp(`logs`);
-const rotateDirectory = resolveApp(`logs/rotate`);
+//  ──[ DIRECTORY FOR LOGS.  ]───────────────────────────────────────────────────────────
+const dirLog = resolveApp(`logs`);
+const dirRotate = resolveApp(`logs/rotate`);
 
 //  ──[ CREATE DIRECTORY. ]──────────────────────────────────────────────────────────────
 // eslint-disable-next-line no-unused-expressions
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+fs.existsSync(dirLog) || fs.mkdirSync(dirLog);
 // eslint-disable-next-line no-unused-expressions
-fs.existsSync(rotateDirectory) || fs.mkdirSync(rotateDirectory);
+fs.existsSync(dirRotate) || fs.mkdirSync(dirRotate);
 
 //  ──[ DATE FOR NAME. ]─────────────────────────────────────────────────────────────────
 // const DATE_LOG = moment.tz('America/Mexico_City').format('YYYY-MM-DD');
@@ -50,8 +50,8 @@ fs.existsSync(rotateDirectory) || fs.mkdirSync(rotateDirectory);
 const NAME_ERROR = `LOG_ERROR.log`;
 const NAME_INFO = `LOG_INFO.log`;
 
-const FILE_ERROR = `${logDirectory}/${NAME_ERROR}`;
-const FILE_INFO = `${logDirectory}/${NAME_INFO}`;
+const FILE_ERROR = `${dirLog}/${NAME_ERROR}`;
+const FILE_INFO = `${dirLog}/${NAME_INFO}`;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  OPTIONS FOR MODULE LOGGER.                                                       │
