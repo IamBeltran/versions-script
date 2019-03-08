@@ -40,7 +40,8 @@
     "test": "./directories/test"
   },
   "scripts": {
-    "start:dev": "cross-env NODE_ENV=development nodemon src/server/bin/www",
+    "start": "cross-env NODE_ENV=production nodemon src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "test": "cross-env NODE_ENV=test nodemon ./test.logger.js",
     "lint": "gulp lint"
   },
