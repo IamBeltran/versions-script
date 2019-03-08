@@ -23,7 +23,7 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const { createLogger, format, config, transports } = winston;
 
 //  ──[ DESTRUCTURING FORMAT. ]──────────────────────────────────────────────────────────
-const { combine, json, printf, colorize, errors } = format;
+const { combine, json, printf, colorize, ms, errors } = format;
 
 //  ──[ DESTRUCTURING CONFIG.  ]─────────────────────────────────────────────────────────
 const { addColors } = config;
@@ -118,6 +118,18 @@ const formatConsole00 = combine(
   }),
 );
 
+const formatConsole01 = combine(
+  colorize({ all: true }),
+  ms(),
+  printf(info => {
+    const { timestamp, label, level, message, ms, ...args } = info;
+    return `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}`;
+    /*Object.keys(args).length
+      ? `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}:\n${JSON.stringify(args, null, 2)}`
+      : `${ms.padEnd(6)} ${level.padEnd(18)}- ${message}`;*/
+  }),
+);
+
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │  SETTINGS OF TRANSPORTS.                                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
@@ -131,7 +143,7 @@ addColors(options.colors);
 const logger = createLogger({
   level: 'info',
   levels: options.levels,
-  format: combine(appendTimestamp(), appendLabel(), json()),
+  format: combine(appendTimestamp(), appendLabel()),
   transports: [
     new transports.Console({
       name: 'CONSOLE_FOR_MIDDLEWARE',
@@ -143,7 +155,7 @@ const logger = createLogger({
       eol: os.EOL,
       json: false,
       colorize: true,
-      format: formatConsole00,
+      format: formatConsole01,
       options: {
         flags: 'a+',
         encoding: 'utf8',
